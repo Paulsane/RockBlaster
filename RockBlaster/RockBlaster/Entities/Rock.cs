@@ -23,7 +23,7 @@ using Texture2D = Microsoft.Xna.Framework.Graphics.Texture2D;
 
 namespace RockBlaster.Entities
 {
-	public partial class A1
+	public partial class Rock
 	{
 		private void CustomInitialize()
 		{

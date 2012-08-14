@@ -39,7 +39,7 @@ using Model = Microsoft.Xna.Framework.Graphics.Model;
 
 namespace RockBlaster.Entities
 {
-	public partial class A1 : PositionedObject, IDestroyable
+	public partial class Rock : PositionedObject, IDestroyable
 	{
         // This is made global so that static lazy-loaded content can access it.
         public static string ContentManagerName
@@ -60,13 +60,13 @@ namespace RockBlaster.Entities
 		public bool Used { get; set; }
 		protected Layer LayerProvidedByContainer = null;
 
-        public A1(string contentManagerName) :
+        public Rock(string contentManagerName) :
             this(contentManagerName, true)
         {
         }
 
 
-        public A1(string contentManagerName, bool addToManagers) :
+        public Rock(string contentManagerName, bool addToManagers) :
 			base()
 		{
 			// Don't delete this:
@@ -120,6 +120,9 @@ namespace RockBlaster.Entities
 		// Generated Methods
 		public virtual void PostInitialize ()
 		{
+			bool oldShapeManagerSuppressAdd = FlatRedBall.Math.Geometry.ShapeManager.SuppressAddingOnVisibilityTrue;
+			FlatRedBall.Math.Geometry.ShapeManager.SuppressAddingOnVisibilityTrue = true;
+			FlatRedBall.Math.Geometry.ShapeManager.SuppressAddingOnVisibilityTrue = oldShapeManagerSuppressAdd;
 		}
 		public virtual void AddToManagersBottomUp (Layer layerToAddTo)
 		{
@@ -170,7 +173,7 @@ namespace RockBlaster.Entities
 				{
 					if (!mHasRegisteredUnload && ContentManagerName != FlatRedBallServices.GlobalContentManager)
 					{
-						FlatRedBallServices.GetContentManagerByName(ContentManagerName).AddUnloadMethod("A1StaticUnload", UnloadStaticContent);
+						FlatRedBallServices.GetContentManagerByName(ContentManagerName).AddUnloadMethod("RockStaticUnload", UnloadStaticContent);
 						mHasRegisteredUnload = true;
 					}
 				}
@@ -181,7 +184,7 @@ namespace RockBlaster.Entities
 					{
 						if (!mHasRegisteredUnload && ContentManagerName != FlatRedBallServices.GlobalContentManager)
 						{
-							FlatRedBallServices.GetContentManagerByName(ContentManagerName).AddUnloadMethod("A1StaticUnload", UnloadStaticContent);
+							FlatRedBallServices.GetContentManagerByName(ContentManagerName).AddUnloadMethod("RockStaticUnload", UnloadStaticContent);
 							mHasRegisteredUnload = true;
 						}
 					}
@@ -213,7 +216,7 @@ namespace RockBlaster.Entities
 	
 	
 	// Extra classes
-	public static class A1ExtensionMethods
+	public static class RockExtensionMethods
 	{
 	}
 	

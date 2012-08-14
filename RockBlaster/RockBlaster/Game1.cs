@@ -41,9 +41,10 @@ namespace RockBlaster
         {
             Renderer.UseRenderTargets = false;
             FlatRedBallServices.InitializeFlatRedBall(this, graphics);
+			CameraSetup.SetupCamera(SpriteManager.Camera, graphics);
 			GlobalContent.Initialize();
 
-            //ScreenManager.Start(typeof(SomeScreen).FullName);
+			Screens.ScreenManager.Start(typeof(RockBlaster.Screens.GameScreen).FullName);
 
             base.Initialize();
         }
