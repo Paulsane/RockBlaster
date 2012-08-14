@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RockBlasterSync", "RockBlasterSync\RockBlasterSync\RockBlasterSync.csproj", "{649DE040-99C6-4838-ADA3-533D0DBD4325}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RockBlaster", "RockBlaster\RockBlaster\RockBlaster.csproj", "{649DE040-99C6-4838-ADA3-533D0DBD4325}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RockBlasterSyncContent", "RockBlasterSync\RockBlasterSyncContent\RockBlasterSyncContent.contentproj", "{64B23BEF-DD26-4B81-AAA6-D9F46B0140B4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RockBlasterContent", "RockBlaster\RockBlasterContent\RockBlasterContent.contentproj", "{64B23BEF-DD26-4B81-AAA6-D9F46B0140B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
