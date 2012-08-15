@@ -59,8 +59,35 @@ namespace RockBlaster.Screens
 		void CustomActivity(bool firstTimeCalled)
 		{
             CollisionActivity();
-
+            RemovalActivity();
 		}
+        
+        void RemovalActivity()
+        {
+            for (int i = BulletList.Count - 1; i > -1; i--)
+            {
+                float absoluteX = Math.Abs(BulletList[i].X);
+                float absoluteY = Math.Abs(BulletList[i].Y);
+
+                const float removeBeyond = 600;
+                if (absoluteX > removeBeyond || absoluteY > removeBeyond)
+                {
+                    BulletList[i].Destroy();
+                }
+            }
+
+            for (int i = RockList.Count - 1; i > -1; i--)
+            {
+                float absoluteX = Math.Abs(RockList[i].X);
+                float absoluteY = Math.Abs(RockList[i].Y);
+
+                const float removeBeyond = 600;
+                if (absoluteX > removeBeyond || absoluteY > removeBeyond)
+                {
+                    RockList[i].Destroy();
+                }
+            }
+        }
 
         private void CollisionActivity()
         {
