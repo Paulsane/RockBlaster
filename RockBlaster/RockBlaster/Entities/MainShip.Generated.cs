@@ -62,6 +62,8 @@ namespace RockBlaster.Entities
 		private static Texture2D MainShip4;
 		
 		private FlatRedBall.Sprite Sprite;
+		public float MovementSpeed = 100f;
+		public float TurningSpeed = 3.14f;
 		public int Index { get; set; }
 		public bool Used { get; set; }
 		protected Layer LayerProvidedByContainer = null;
@@ -158,6 +160,8 @@ namespace RockBlaster.Entities
 			Sprite.ScaleY = 16f;
 			Sprite.PixelSize = 0.5f;
 			Sprite.Texture = MainShip1;
+			MovementSpeed = 100f;
+			TurningSpeed = 3.14f;
 			FlatRedBall.Math.Geometry.ShapeManager.SuppressAddingOnVisibilityTrue = oldShapeManagerSuppressAdd;
 		}
 		public virtual void AddToManagersBottomUp (Layer layerToAddTo)

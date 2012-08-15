@@ -41,6 +41,10 @@ namespace RockBlaster
         {
             Renderer.UseRenderTargets = false;
             FlatRedBallServices.InitializeFlatRedBall(this, graphics);
+            if (FlatRedBall.Input.InputManager.Xbox360GamePads[0].IsConnected == false)
+            {
+                FlatRedBall.Input.InputManager.Xbox360GamePads[0].CreateDefaultButtonMap();
+            }
 			CameraSetup.SetupCamera(SpriteManager.Camera, graphics);
 			GlobalContent.Initialize();
 

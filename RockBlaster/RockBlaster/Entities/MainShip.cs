@@ -25,17 +25,29 @@ namespace RockBlaster.Entities
 {
 	public partial class MainShip
 	{
+        Xbox360GamePad mGamePad;
+
 		private void CustomInitialize()
 		{
-
-
+            mGamePad = InputManager.Xbox360GamePads[0];
+            
 		}
 
 		private void CustomActivity()
 		{
-
-
+            MovementActivity();
+            TurningActivity();
 		}
+
+        private void TurningActivity()
+        {
+            this.RotationZVelocity = -mGamePad.LeftStick.Position.X * TurningSpeed;
+        }
+
+        void MovementActivity()
+        {
+            this.Velocity = this.RotationMatrix.Up * this.MovementSpeed;
+        }
 
 		private void CustomDestroy()
 		{

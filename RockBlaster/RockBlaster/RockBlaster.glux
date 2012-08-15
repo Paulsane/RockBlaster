@@ -29,6 +29,14 @@
           <AddToManagers>true</AddToManagers>
           <ContainedObjects>
             <NamedObjectSave>
+              <CustomProperty>
+                <Type>float</Type>
+                <Member>MovementSpeed</Member>
+              </CustomProperty>
+              <CustomProperty>
+                <Type>float</Type>
+                <Member>TurningSpeed</Member>
+              </CustomProperty>
               <SourceType>Entity</SourceType>
               <SourceClassType>Entities\MainShip</SourceClassType>
               <InstanceName>Player1Ship</InstanceName>
@@ -82,6 +90,30 @@
       <Is2D>false</Is2D>
     </EntitySave>
     <EntitySave>
+      <CustomVariables>
+        <CustomVariable>
+          <Properties>
+            <PropertySave>
+              <Name>Type</Name>
+              <ValueAsString>float</ValueAsString>
+            </PropertySave>
+          </Properties>
+          <Name>MovementSpeed</Name>
+          <Type>float</Type>
+          <DefaultValue xsi:type="xsd:float">100</DefaultValue>
+        </CustomVariable>
+        <CustomVariable>
+          <Properties>
+            <PropertySave>
+              <Name>Type</Name>
+              <ValueAsString>float</ValueAsString>
+            </PropertySave>
+          </Properties>
+          <Name>TurningSpeed</Name>
+          <Type>float</Type>
+          <DefaultValue xsi:type="xsd:float">3.14</DefaultValue>
+        </CustomVariable>
+      </CustomVariables>
       <Name>Entities\MainShip</Name>
       <NamedObjects>
         <NamedObjectSave>
