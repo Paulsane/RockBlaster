@@ -17,9 +17,12 @@ using RockBlaster.Screens;
 using Matrix = Microsoft.Xna.Framework.Matrix;
 using FlatRedBall.Graphics;
 using FlatRedBall.Math;
+using RockBlaster.Performance;
 using FlatRedBall.Broadcasting;
 using RockBlaster.Entities;
+using RockBlaster.Factories;
 using FlatRedBall;
+using Microsoft.Xna.Framework.Graphics;
 
 #if XNA4
 using Color = Microsoft.Xna.Framework.Color;
@@ -39,7 +42,7 @@ using Model = Microsoft.Xna.Framework.Graphics.Model;
 
 namespace RockBlaster.Entities
 {
-	public partial class Bullet : PositionedObject, IDestroyable
+	public partial class Bullet : PositionedObject, IDestroyable, IPoolable
 	{
         // This is made global so that static lazy-loaded content can access it.
         public static string ContentManagerName
@@ -55,7 +58,10 @@ namespace RockBlaster.Entities
 		static object mLockObject = new object();
 		static bool mHasRegisteredUnload = false;
 		static bool IsStaticContentLoaded = false;
+		private static Texture2D Bullet1;
 		
+		private FlatRedBall.Sprite Sprite;
+		public float MovementSpeed = 300f;
 		public int Index { get; set; }
 		public bool Used { get; set; }
 		protected Layer LayerProvidedByContainer = null;
@@ -79,6 +85,7 @@ namespace RockBlaster.Entities
 		{
 			// Generated Initialize
 			LoadStaticContent(ContentManagerName);
+			Sprite = new FlatRedBall.Sprite();
 			
 			PostInitialize();
 			if (addToManagers)
@@ -111,7 +118,15 @@ namespace RockBlaster.Entities
 		{
 			// Generated Destroy
 			SpriteManager.RemovePositionedObject(this);
+			if (Used)
+			{
+				BulletFactory.MakeUnused(this, false);
+			}
 			
+			if (Sprite != null)
+			{
+				Sprite.Detach(); SpriteManager.RemoveSprite(Sprite);
+			}
 
 
 			CustomDestroy();
@@ -122,6 +137,14 @@ namespace RockBlaster.Entities
 		{
 			bool oldShapeManagerSuppressAdd = FlatRedBall.Math.Geometry.ShapeManager.SuppressAddingOnVisibilityTrue;
 			FlatRedBall.Math.Geometry.ShapeManager.SuppressAddingOnVisibilityTrue = true;
+			if (Sprite!= null && Sprite.Parent == null)
+			{
+				Sprite.CopyAbsoluteToRelative();
+				Sprite.AttachTo(this, false);
+			}
+			Sprite.PixelSize = 0.5f;
+			Sprite.Texture = Bullet1;
+			MovementSpeed = 300f;
 			FlatRedBall.Math.Geometry.ShapeManager.SuppressAddingOnVisibilityTrue = oldShapeManagerSuppressAdd;
 		}
 		public virtual void AddToManagersBottomUp (Layer layerToAddTo)
@@ -141,6 +164,9 @@ namespace RockBlaster.Entities
 			RotationX = 0;
 			RotationY = 0;
 			RotationZ = 0;
+			SpriteManager.AddToLayer(Sprite, layerToAddTo);
+			Sprite.PixelSize = 0.5f;
+			Sprite.Texture = Bullet1;
 			X = oldX;
 			Y = oldY;
 			Z = oldZ;
@@ -152,6 +178,7 @@ namespace RockBlaster.Entities
 		{
 			this.ForceUpdateDependenciesDeep();
 			SpriteManager.ConvertToManuallyUpdated(this);
+			SpriteManager.ConvertToManuallyUpdated(Sprite);
 		}
 		public static void LoadStaticContent (string contentManagerName)
 		{
@@ -178,6 +205,11 @@ namespace RockBlaster.Entities
 					}
 				}
 				bool registerUnload = false;
+				if (!FlatRedBallServices.IsLoaded<Microsoft.Xna.Framework.Graphics.Texture2D>(@"content/entities/bullet/bullet1.png", ContentManagerName))
+				{
+					registerUnload = true;
+				}
+				Bullet1 = FlatRedBallServices.Load<Microsoft.Xna.Framework.Graphics.Texture2D>(@"content/entities/bullet/bullet1.png", ContentManagerName);
 				if (registerUnload && ContentManagerName != FlatRedBallServices.GlobalContentManager)
 				{
 					lock (mLockObject)
@@ -196,9 +228,27 @@ namespace RockBlaster.Entities
 		{
 			IsStaticContentLoaded = false;
 			mHasRegisteredUnload = false;
+			if (Bullet1 != null)
+			{
+				Bullet1= null;
+			}
+		}
+		public static object GetStaticMember (string memberName)
+		{
+			switch(memberName)
+			{
+				case  "Bullet1":
+					return Bullet1;
+			}
+			return null;
 		}
 		object GetMember (string memberName)
 		{
+			switch(memberName)
+			{
+				case  "Bullet1":
+					return Bullet1;
+			}
 			return null;
 		}
 		protected bool mIsPaused;
@@ -210,6 +260,7 @@ namespace RockBlaster.Entities
 		public virtual void SetToIgnorePausing ()
 		{
 			InstructionManager.IgnorePausingFor(this);
+			InstructionManager.IgnorePausingFor(Sprite);
 		}
 
     }

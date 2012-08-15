@@ -29,6 +29,7 @@ using Microsoft.Xna.Framework.Media;
 // Generated Usings
 using FlatRedBall.Broadcasting;
 using RockBlaster.Entities;
+using RockBlaster.Factories;
 using FlatRedBall;
 using FlatRedBall.Math;
 
@@ -81,6 +82,7 @@ namespace RockBlaster.Screens
 // Generated AddToManagers
 		public override void AddToManagers ()
 		{
+			BulletFactory.Initialize(BulletList, ContentManagerName);
 			base.AddToManagers();
 			AddToManagersBottomUp();
 			CustomInitialize();
@@ -138,6 +140,7 @@ namespace RockBlaster.Screens
 		public override void Destroy()
 		{
 			// Generated Destroy
+			BulletFactory.Destroy();
 			
 			for (int i = BulletList.Count - 1; i > -1; i--)
 			{

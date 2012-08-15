@@ -37,7 +37,28 @@ namespace RockBlaster.Entities
 		{
             MovementActivity();
             TurningActivity();
+            ShootingActivity();
 		}
+
+        private void ShootingActivity()
+        {
+            if (mGamePad.ButtonPushed(Xbox360GamePad.Button.A))
+            {
+                Bullet firstBullet = RockBlaster.Factories.BulletFactory.CreateNew();
+                firstBullet.Position = this.Position;
+                firstBullet.Position += this.RotationMatrix.Up * 12;
+                firstBullet.Position += this.RotationMatrix.Right * 6;
+                firstBullet.RotationZ = this.RotationZ;
+                firstBullet.Velocity = this.RotationMatrix.Up * firstBullet.MovementSpeed;
+
+                Bullet secondBullet = RockBlaster.Factories.BulletFactory.CreateNew();
+                secondBullet.Position = this.Position;
+                secondBullet.Position += this.RotationMatrix.Up * 12;
+                secondBullet.Position -= this.RotationMatrix.Right * 6;
+                secondBullet.RotationZ = this.RotationZ;
+                secondBullet.Velocity = this.RotationMatrix.Up * secondBullet.MovementSpeed;
+            }
+        }
 
         private void TurningActivity()
         {
