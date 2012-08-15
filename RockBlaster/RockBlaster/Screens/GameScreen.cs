@@ -60,8 +60,17 @@ namespace RockBlaster.Screens
 		{
             CollisionActivity();
             RemovalActivity();
+            EndGameActivity();
 		}
-        
+
+        void EndGameActivity()
+        {
+            if (EndGameUiInstance.Visible == false && this.MainShipList.Count == 0)
+            {
+                EndGameUiInstance.Visible = true;
+            }
+        }
+
         void RemovalActivity()
         {
             for (int i = BulletList.Count - 1; i > -1; i--)

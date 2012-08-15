@@ -40,7 +40,7 @@ using Model = Microsoft.Xna.Framework.Graphics.Model;
 
 namespace RockBlaster.Entities
 {
-	public partial class EndGameUi : PositionedObject, IDestroyable
+	public partial class EndGameUi : PositionedObject, IDestroyable, IVisible
 	{
         // This is made global so that static lazy-loaded content can access it.
         public static string ContentManagerName
@@ -57,8 +57,53 @@ namespace RockBlaster.Entities
 		static bool mHasRegisteredUnload = false;
 		static bool IsStaticContentLoaded = false;
 		
+		private FlatRedBall.Graphics.Text MessageObject;
 		public int Index { get; set; }
 		public bool Used { get; set; }
+		public event EventHandler BeforeVisibleSet;
+		public event EventHandler AfterVisibleSet;
+		protected bool mVisible = true;
+		public virtual bool Visible
+		{
+			get
+			{
+				return mVisible;
+			}
+			set
+			{
+				if (BeforeVisibleSet != null)
+				{
+					BeforeVisibleSet(this, null);
+				}
+				mVisible = value;
+				if (AfterVisibleSet != null)
+				{
+					AfterVisibleSet(this, null);
+				}
+			}
+		}
+		public bool IgnoresParentVisibility { get; set; }
+		public bool AbsoluteVisible
+		{
+			get
+			{
+				return Visible && (Parent == null || IgnoresParentVisibility || Parent is IVisible == false || (Parent as IVisible).AbsoluteVisible);
+			}
+		}
+		IVisible IVisible.Parent
+		{
+			get
+			{
+				if (this.Parent != null && this.Parent is IVisible)
+				{
+					return this.Parent as IVisible;
+				}
+				else
+				{
+					return null;
+				}
+			}
+		}
 		protected Layer LayerProvidedByContainer = null;
 
         public EndGameUi(string contentManagerName) :
@@ -80,6 +125,7 @@ namespace RockBlaster.Entities
 		{
 			// Generated Initialize
 			LoadStaticContent(ContentManagerName);
+			MessageObject = new FlatRedBall.Graphics.Text();
 			
 			PostInitialize();
 			if (addToManagers)
@@ -113,6 +159,10 @@ namespace RockBlaster.Entities
 			// Generated Destroy
 			SpriteManager.RemovePositionedObject(this);
 			
+			if (MessageObject != null)
+			{
+				MessageObject.Detach(); TextManager.RemoveText(MessageObject);
+			}
 
 
 			CustomDestroy();
@@ -123,6 +173,13 @@ namespace RockBlaster.Entities
 		{
 			bool oldShapeManagerSuppressAdd = FlatRedBall.Math.Geometry.ShapeManager.SuppressAddingOnVisibilityTrue;
 			FlatRedBall.Math.Geometry.ShapeManager.SuppressAddingOnVisibilityTrue = true;
+			if (MessageObject!= null && MessageObject.Parent == null)
+			{
+				MessageObject.CopyAbsoluteToRelative();
+				MessageObject.AttachTo(this, false);
+			}
+			MessageObject.DisplayText = "Game Over";
+			Visible = true;
 			FlatRedBall.Math.Geometry.ShapeManager.SuppressAddingOnVisibilityTrue = oldShapeManagerSuppressAdd;
 		}
 		public virtual void AddToManagersBottomUp (Layer layerToAddTo)
@@ -142,6 +199,9 @@ namespace RockBlaster.Entities
 			RotationX = 0;
 			RotationY = 0;
 			RotationZ = 0;
+			TextManager.AddToLayer(MessageObject, layerToAddTo);
+			MessageObject.SetPixelPerfectScale(layerToAddTo);
+			MessageObject.DisplayText = "Game Over";
 			X = oldX;
 			Y = oldY;
 			Z = oldZ;
@@ -153,6 +213,7 @@ namespace RockBlaster.Entities
 		{
 			this.ForceUpdateDependenciesDeep();
 			SpriteManager.ConvertToManuallyUpdated(this);
+			TextManager.ConvertToManuallyUpdated(MessageObject);
 		}
 		public static void LoadStaticContent (string contentManagerName)
 		{
@@ -211,6 +272,7 @@ namespace RockBlaster.Entities
 		public virtual void SetToIgnorePausing ()
 		{
 			InstructionManager.IgnorePausingFor(this);
+			InstructionManager.IgnorePausingFor(MessageObject);
 		}
 
     }
@@ -219,6 +281,14 @@ namespace RockBlaster.Entities
 	// Extra classes
 	public static class EndGameUiExtensionMethods
 	{
+		public static void SetVisible (this PositionedObjectList<EndGameUi> list, bool value)
+		{
+			int count = list.Count;
+			for (int i = 0; i < count; i++)
+			{
+				list[i].Visible = value;
+			}
+		}
 	}
 	
 }

@@ -163,6 +163,7 @@ namespace RockBlaster.Entities
 				mCollision.CopyAbsoluteToRelative();
 				mCollision.AttachTo(this, false);
 			}
+			Collision.Visible = false;
 			if (Collision.Parent == null)
 			{
 				Collision.X = 0.5f;
@@ -204,6 +205,7 @@ namespace RockBlaster.Entities
 			Sprite.PixelSize = 0.5f;
 			Sprite.Texture = Bullet1;
 			ShapeManager.AddToLayer(mCollision, layerToAddTo);
+			mCollision.Visible = false;
 			if (mCollision.Parent == null)
 			{
 				mCollision.X = 0.5f;

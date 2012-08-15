@@ -50,6 +50,11 @@
           </ContainedObjects>
         </NamedObjectSave>
         <NamedObjectSave>
+          <CustomProperty>
+            <Type>bool</Type>
+            <Member>Visible</Member>
+            <ValueAsBool>false</ValueAsBool>
+          </CustomProperty>
           <SourceType>Entity</SourceType>
           <SourceClassType>Entities\EndGameUi</SourceClassType>
           <InstanceName>EndGameUiInstance</InstanceName>
@@ -155,6 +160,7 @@
           <CustomProperty>
             <Type>bool</Type>
             <Member>Visible</Member>
+            <ValueAsBool>false</ValueAsBool>
           </CustomProperty>
           <CustomProperty>
             <Type>float</Type>
@@ -194,7 +200,63 @@
       <Is2D>false</Is2D>
     </EntitySave>
     <EntitySave>
+      <CustomVariables>
+        <CustomVariable>
+          <Properties>
+            <PropertySave>
+              <Name>Type</Name>
+              <ValueAsString>bool</ValueAsString>
+            </PropertySave>
+          </Properties>
+          <Name>Visible</Name>
+          <Type>bool</Type>
+          <DefaultValue xsi:type="xsd:boolean">true</DefaultValue>
+        </CustomVariable>
+      </CustomVariables>
+      <ImplementsIVisible>true</ImplementsIVisible>
       <Name>Entities\EndGameUi</Name>
+      <NamedObjects>
+        <NamedObjectSave>
+          <CustomProperty>
+            <Type>string</Type>
+            <Member>DisplayText</Member>
+            <ValueAsString>Game Over</ValueAsString>
+          </CustomProperty>
+          <CustomProperty>
+            <Type>float</Type>
+            <Member>X</Member>
+          </CustomProperty>
+          <CustomProperty>
+            <Type>float</Type>
+            <Member>Y</Member>
+          </CustomProperty>
+          <CustomProperty>
+            <Type>float</Type>
+            <Member>Z</Member>
+          </CustomProperty>
+          <CustomProperty>
+            <Type>float</Type>
+            <Member>Scale</Member>
+          </CustomProperty>
+          <CustomProperty>
+            <Type>float</Type>
+            <Member>Spacing</Member>
+          </CustomProperty>
+          <CustomProperty>
+            <Type>float</Type>
+            <Member>NewLineDistance</Member>
+          </CustomProperty>
+          <CustomProperty>
+            <Type>BitmapFont</Type>
+            <Member>Font</Member>
+          </CustomProperty>
+          <SourceType>FlatRedBallType</SourceType>
+          <SourceClassType>Text</SourceClassType>
+          <InstanceName>MessageObject</InstanceName>
+          <AttachToContainer>true</AttachToContainer>
+          <AddToManagers>true</AddToManagers>
+        </NamedObjectSave>
+      </NamedObjects>
       <Is2D>false</Is2D>
     </EntitySave>
     <EntitySave>
@@ -590,6 +652,7 @@
           <CustomProperty>
             <Type>bool</Type>
             <Member>Visible</Member>
+            <ValueAsBool>false</ValueAsBool>
           </CustomProperty>
           <CustomProperty>
             <Type>float</Type>
@@ -808,6 +871,7 @@
           <CustomProperty>
             <Type>bool</Type>
             <Member>Visible</Member>
+            <ValueAsBool>false</ValueAsBool>
           </CustomProperty>
           <CustomProperty>
             <Type>float</Type>

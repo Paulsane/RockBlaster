@@ -187,12 +187,14 @@ namespace RockBlaster.Screens
 		{
 			bool oldShapeManagerSuppressAdd = FlatRedBall.Math.Geometry.ShapeManager.SuppressAddingOnVisibilityTrue;
 			FlatRedBall.Math.Geometry.ShapeManager.SuppressAddingOnVisibilityTrue = true;
+			EndGameUiInstance.Visible = false;
 			FlatRedBall.Math.Geometry.ShapeManager.SuppressAddingOnVisibilityTrue = oldShapeManagerSuppressAdd;
 		}
 		public virtual void AddToManagersBottomUp ()
 		{
 			Player1Ship.AddToManagers(mLayer);
 			EndGameUiInstance.AddToManagers(mLayer);
+			EndGameUiInstance.Visible = false;
 			HudInstance.AddToManagers(mLayer);
 			RockSpawnerInstance.AddToManagers(mLayer);
 		}

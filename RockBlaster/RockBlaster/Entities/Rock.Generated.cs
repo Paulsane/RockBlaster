@@ -229,6 +229,7 @@ namespace RockBlaster.Entities
 				mCollision.CopyAbsoluteToRelative();
 				mCollision.AttachTo(this, false);
 			}
+			Collision.Visible = false;
 			Collision.Radius = 6f;
 			CollisionRadius = 6f;
 			NumberOfRocksToBreakInto = 2;
@@ -257,6 +258,7 @@ namespace RockBlaster.Entities
 			Sprite.PixelSize = 0.5f;
 			Sprite.Texture = Rock1;
 			ShapeManager.AddToLayer(mCollision, layerToAddTo);
+			mCollision.Visible = false;
 			mCollision.Radius = 6f;
 			X = oldX;
 			Y = oldY;
