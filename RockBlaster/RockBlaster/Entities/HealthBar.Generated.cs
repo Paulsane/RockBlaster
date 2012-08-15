@@ -19,6 +19,7 @@ using FlatRedBall.Graphics;
 using FlatRedBall.Math;
 using FlatRedBall.Broadcasting;
 using RockBlaster.Entities;
+using RockBlaster.Factories;
 using FlatRedBall;
 
 #if XNA4

@@ -48,6 +48,7 @@ namespace RockBlaster.Screens
 		private RockBlaster.Entities.MainShip Player1Ship;
 		private RockBlaster.Entities.EndGameUi EndGameUiInstance;
 		private RockBlaster.Entities.Hud HudInstance;
+		private RockBlaster.Entities.RockSpawner RockSpawnerInstance;
 
 		public GameScreen()
 			: base("GameScreen")
@@ -67,6 +68,8 @@ namespace RockBlaster.Screens
 			EndGameUiInstance.Name = "EndGameUiInstance";
 			HudInstance = new RockBlaster.Entities.Hud(ContentManagerName, false);
 			HudInstance.Name = "HudInstance";
+			RockSpawnerInstance = new RockBlaster.Entities.RockSpawner(ContentManagerName, false);
+			RockSpawnerInstance.Name = "RockSpawnerInstance";
 			MainShipList.Add(Player1Ship);
 			
 			
@@ -83,6 +86,7 @@ namespace RockBlaster.Screens
 		public override void AddToManagers ()
 		{
 			BulletFactory.Initialize(BulletList, ContentManagerName);
+			RockFactory.Initialize(RockList, ContentManagerName);
 			base.AddToManagers();
 			AddToManagersBottomUp();
 			CustomInitialize();
@@ -121,6 +125,7 @@ namespace RockBlaster.Screens
 				}
 				EndGameUiInstance.Activity();
 				HudInstance.Activity();
+				RockSpawnerInstance.Activity();
 			}
 			else
 			{
@@ -141,6 +146,7 @@ namespace RockBlaster.Screens
 		{
 			// Generated Destroy
 			BulletFactory.Destroy();
+			RockFactory.Destroy();
 			
 			for (int i = BulletList.Count - 1; i > -1; i--)
 			{
@@ -164,6 +170,11 @@ namespace RockBlaster.Screens
 				HudInstance.Destroy();
 				HudInstance.Detach();
 			}
+			if (RockSpawnerInstance != null)
+			{
+				RockSpawnerInstance.Destroy();
+				RockSpawnerInstance.Detach();
+			}
 
 			base.Destroy();
 
@@ -183,6 +194,7 @@ namespace RockBlaster.Screens
 			Player1Ship.AddToManagers(mLayer);
 			EndGameUiInstance.AddToManagers(mLayer);
 			HudInstance.AddToManagers(mLayer);
+			RockSpawnerInstance.AddToManagers(mLayer);
 		}
 		public virtual void ConvertToManuallyUpdated ()
 		{
@@ -200,6 +212,7 @@ namespace RockBlaster.Screens
 			}
 			EndGameUiInstance.ConvertToManuallyUpdated();
 			HudInstance.ConvertToManuallyUpdated();
+			RockSpawnerInstance.ConvertToManuallyUpdated();
 		}
 		public static void LoadStaticContent (string contentManagerName)
 		{
@@ -215,6 +228,7 @@ namespace RockBlaster.Screens
 			#endif
 			RockBlaster.Entities.EndGameUi.LoadStaticContent(contentManagerName);
 			RockBlaster.Entities.Hud.LoadStaticContent(contentManagerName);
+			RockBlaster.Entities.RockSpawner.LoadStaticContent(contentManagerName);
 			CustomLoadStaticContent(contentManagerName);
 		}
 		object GetMember (string memberName)

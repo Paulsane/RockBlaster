@@ -136,7 +136,12 @@
     <Compile Include="Entities\Rock.Generated.cs">
       <DependentUpon>Rock.cs</DependentUpon>
     </Compile>
+    <Compile Include="Entities\RockSpawner.cs" />
+    <Compile Include="Entities\RockSpawner.Generated.cs">
+      <DependentUpon>RockSpawner.cs</DependentUpon>
+    </Compile>
     <Compile Include="Factories\BulletFactory.Generated.cs" />
+    <Compile Include="Factories\RockFactory.Generated.cs" />
     <Compile Include="GlobalContent.Generated.cs" />
     <Compile Include="Performance\IPoolable.Generated.cs" />
     <Compile Include="Performance\PoolList.Generated.cs" />

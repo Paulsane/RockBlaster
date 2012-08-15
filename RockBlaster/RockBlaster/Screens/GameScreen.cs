@@ -21,6 +21,8 @@ using Vector3 = Microsoft.Xna.Framework.Vector3;
 using Texture2D = Microsoft.Xna.Framework.Graphics.Texture2D;
 #endif
 
+using RockBlaster.Entities;
+
 namespace RockBlaster.Screens
 {
 	public partial class GameScreen
@@ -34,9 +36,73 @@ namespace RockBlaster.Screens
 
 		void CustomActivity(bool firstTimeCalled)
 		{
-
+            CollisionActivity();
 
 		}
+
+        private void CollisionActivity()
+        {
+            BulletVsRockCollisionActivity();
+            MainShipVsRockCollisionActivity();
+            RockVsRockCollisionActivity();
+        }
+
+        private void RockVsRockCollisionActivity()
+        {
+            for (int i = BulletList.Count - 1; i > -1; i--)
+            {
+                Bullet bullet = BulletList[i];
+                for (int j = RockList.Count - 1; j > -1; j--)
+                {
+                    Rock rock = RockList[j];
+
+                    if (rock.Collision.CollideAgainst(bullet.Collision))
+                    {
+                        rock.Destroy();
+                        bullet.Destroy();
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void MainShipVsRockCollisionActivity()
+        {
+            for (int i = RockList.Count - 1; i > -1; i--)
+            {
+                Rock rock = RockList[i];
+                for (int j = MainShipList.Count - 1; j > -1; j--)
+                {
+                    MainShip mainShip = MainShipList[j];
+
+                    if (mainShip.Collision.CollideAgainst(rock.Collision))
+                    {
+                        mainShip.Destroy();
+                        rock.Destroy();
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void BulletVsRockCollisionActivity()
+        {
+            for (int i = 0; i < RockList.Count; i++)
+            {
+                Rock firstRock = RockList[i];
+                for (int j = i + 1; j < RockList.Count; j++)
+                {
+                    Rock secondRock = RockList[j];
+
+                    float firstRockMass = 1;
+                    float secondRockMass = 1;
+                    float elasticity = .8f;
+
+                    firstRock.Collision.CollideAgainstBounce(
+                        secondRock.Collision, firstRockMass, secondRockMass, elasticity);
+                }
+            }
+        }
 
 		void CustomDestroy()
 		{

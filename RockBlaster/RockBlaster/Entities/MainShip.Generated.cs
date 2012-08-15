@@ -19,7 +19,9 @@ using FlatRedBall.Graphics;
 using FlatRedBall.Math;
 using FlatRedBall.Broadcasting;
 using RockBlaster.Entities;
+using RockBlaster.Factories;
 using FlatRedBall;
+using FlatRedBall.Math.Geometry;
 using Microsoft.Xna.Framework.Graphics;
 
 #if XNA4
@@ -62,6 +64,14 @@ namespace RockBlaster.Entities
 		private static Texture2D MainShip4;
 		
 		private FlatRedBall.Sprite Sprite;
+		private FlatRedBall.Math.Geometry.Circle mCollision;
+		public FlatRedBall.Math.Geometry.Circle Collision
+		{
+			get
+			{
+				return mCollision;
+			}
+		}
 		public float MovementSpeed = 100f;
 		public float TurningSpeed = 3.14f;
 		public int Index { get; set; }
@@ -88,6 +98,7 @@ namespace RockBlaster.Entities
 			// Generated Initialize
 			LoadStaticContent(ContentManagerName);
 			Sprite = new FlatRedBall.Sprite();
+			mCollision = new FlatRedBall.Math.Geometry.Circle();
 			
 			PostInitialize();
 			if (addToManagers)
@@ -125,6 +136,10 @@ namespace RockBlaster.Entities
 			{
 				Sprite.Detach(); SpriteManager.RemoveSprite(Sprite);
 			}
+			if (Collision != null)
+			{
+				Collision.Detach(); ShapeManager.Remove(Collision);
+			}
 
 
 			CustomDestroy();
@@ -160,6 +175,28 @@ namespace RockBlaster.Entities
 			Sprite.ScaleY = 16f;
 			Sprite.PixelSize = 0.5f;
 			Sprite.Texture = MainShip1;
+			if (mCollision!= null && mCollision.Parent == null)
+			{
+				mCollision.CopyAbsoluteToRelative();
+				mCollision.AttachTo(this, false);
+			}
+			if (Collision.Parent == null)
+			{
+				Collision.X = 0f;
+			}
+			else
+			{
+				Collision.RelativeX = 0f;
+			}
+			if (Collision.Parent == null)
+			{
+				Collision.Y = 0f;
+			}
+			else
+			{
+				Collision.RelativeY = 0f;
+			}
+			Collision.Radius = 10f;
 			MovementSpeed = 100f;
 			TurningSpeed = 3.14f;
 			FlatRedBall.Math.Geometry.ShapeManager.SuppressAddingOnVisibilityTrue = oldShapeManagerSuppressAdd;
@@ -202,6 +239,24 @@ namespace RockBlaster.Entities
 			Sprite.ScaleY = 16f;
 			Sprite.PixelSize = 0.5f;
 			Sprite.Texture = MainShip1;
+			ShapeManager.AddToLayer(mCollision, layerToAddTo);
+			if (mCollision.Parent == null)
+			{
+				mCollision.X = 0f;
+			}
+			else
+			{
+				mCollision.RelativeX = 0f;
+			}
+			if (mCollision.Parent == null)
+			{
+				mCollision.Y = 0f;
+			}
+			else
+			{
+				mCollision.RelativeY = 0f;
+			}
+			mCollision.Radius = 10f;
 			X = oldX;
 			Y = oldY;
 			Z = oldZ;
@@ -335,6 +390,7 @@ namespace RockBlaster.Entities
 		{
 			InstructionManager.IgnorePausingFor(this);
 			InstructionManager.IgnorePausingFor(Sprite);
+			InstructionManager.IgnorePausingFor(Collision);
 		}
 
     }

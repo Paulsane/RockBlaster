@@ -17,9 +17,13 @@ using RockBlaster.Screens;
 using Matrix = Microsoft.Xna.Framework.Matrix;
 using FlatRedBall.Graphics;
 using FlatRedBall.Math;
+using RockBlaster.Performance;
 using FlatRedBall.Broadcasting;
 using RockBlaster.Entities;
+using RockBlaster.Factories;
 using FlatRedBall;
+using FlatRedBall.Math.Geometry;
+using Microsoft.Xna.Framework.Graphics;
 
 #if XNA4
 using Color = Microsoft.Xna.Framework.Color;
@@ -39,7 +43,7 @@ using Model = Microsoft.Xna.Framework.Graphics.Model;
 
 namespace RockBlaster.Entities
 {
-	public partial class Rock : PositionedObject, IDestroyable
+	public partial class Rock : PositionedObject, IDestroyable, IPoolable
 	{
         // This is made global so that static lazy-loaded content can access it.
         public static string ContentManagerName
@@ -55,7 +59,20 @@ namespace RockBlaster.Entities
 		static object mLockObject = new object();
 		static bool mHasRegisteredUnload = false;
 		static bool IsStaticContentLoaded = false;
+		private static Texture2D Rock1;
+		private static Texture2D Rock2;
+		private static Texture2D Rock3;
+		private static Texture2D Rock4;
 		
+		private FlatRedBall.Sprite Sprite;
+		private FlatRedBall.Math.Geometry.Circle mCollision;
+		public FlatRedBall.Math.Geometry.Circle Collision
+		{
+			get
+			{
+				return mCollision;
+			}
+		}
 		public int Index { get; set; }
 		public bool Used { get; set; }
 		protected Layer LayerProvidedByContainer = null;
@@ -79,6 +96,8 @@ namespace RockBlaster.Entities
 		{
 			// Generated Initialize
 			LoadStaticContent(ContentManagerName);
+			Sprite = new FlatRedBall.Sprite();
+			mCollision = new FlatRedBall.Math.Geometry.Circle();
 			
 			PostInitialize();
 			if (addToManagers)
@@ -111,7 +130,19 @@ namespace RockBlaster.Entities
 		{
 			// Generated Destroy
 			SpriteManager.RemovePositionedObject(this);
+			if (Used)
+			{
+				RockFactory.MakeUnused(this, false);
+			}
 			
+			if (Sprite != null)
+			{
+				Sprite.Detach(); SpriteManager.RemoveSprite(Sprite);
+			}
+			if (Collision != null)
+			{
+				Collision.Detach(); ShapeManager.Remove(Collision);
+			}
 
 
 			CustomDestroy();
@@ -122,6 +153,19 @@ namespace RockBlaster.Entities
 		{
 			bool oldShapeManagerSuppressAdd = FlatRedBall.Math.Geometry.ShapeManager.SuppressAddingOnVisibilityTrue;
 			FlatRedBall.Math.Geometry.ShapeManager.SuppressAddingOnVisibilityTrue = true;
+			if (Sprite!= null && Sprite.Parent == null)
+			{
+				Sprite.CopyAbsoluteToRelative();
+				Sprite.AttachTo(this, false);
+			}
+			Sprite.PixelSize = 0.5f;
+			Sprite.Texture = Rock1;
+			if (mCollision!= null && mCollision.Parent == null)
+			{
+				mCollision.CopyAbsoluteToRelative();
+				mCollision.AttachTo(this, false);
+			}
+			Collision.Radius = 6f;
 			FlatRedBall.Math.Geometry.ShapeManager.SuppressAddingOnVisibilityTrue = oldShapeManagerSuppressAdd;
 		}
 		public virtual void AddToManagersBottomUp (Layer layerToAddTo)
@@ -141,6 +185,11 @@ namespace RockBlaster.Entities
 			RotationX = 0;
 			RotationY = 0;
 			RotationZ = 0;
+			SpriteManager.AddToLayer(Sprite, layerToAddTo);
+			Sprite.PixelSize = 0.5f;
+			Sprite.Texture = Rock1;
+			ShapeManager.AddToLayer(mCollision, layerToAddTo);
+			mCollision.Radius = 6f;
 			X = oldX;
 			Y = oldY;
 			Z = oldZ;
@@ -152,6 +201,7 @@ namespace RockBlaster.Entities
 		{
 			this.ForceUpdateDependenciesDeep();
 			SpriteManager.ConvertToManuallyUpdated(this);
+			SpriteManager.ConvertToManuallyUpdated(Sprite);
 		}
 		public static void LoadStaticContent (string contentManagerName)
 		{
@@ -178,6 +228,26 @@ namespace RockBlaster.Entities
 					}
 				}
 				bool registerUnload = false;
+				if (!FlatRedBallServices.IsLoaded<Microsoft.Xna.Framework.Graphics.Texture2D>(@"content/entities/rock/rock1.png", ContentManagerName))
+				{
+					registerUnload = true;
+				}
+				Rock1 = FlatRedBallServices.Load<Microsoft.Xna.Framework.Graphics.Texture2D>(@"content/entities/rock/rock1.png", ContentManagerName);
+				if (!FlatRedBallServices.IsLoaded<Microsoft.Xna.Framework.Graphics.Texture2D>(@"content/entities/rock/rock2.png", ContentManagerName))
+				{
+					registerUnload = true;
+				}
+				Rock2 = FlatRedBallServices.Load<Microsoft.Xna.Framework.Graphics.Texture2D>(@"content/entities/rock/rock2.png", ContentManagerName);
+				if (!FlatRedBallServices.IsLoaded<Microsoft.Xna.Framework.Graphics.Texture2D>(@"content/entities/rock/rock3.png", ContentManagerName))
+				{
+					registerUnload = true;
+				}
+				Rock3 = FlatRedBallServices.Load<Microsoft.Xna.Framework.Graphics.Texture2D>(@"content/entities/rock/rock3.png", ContentManagerName);
+				if (!FlatRedBallServices.IsLoaded<Microsoft.Xna.Framework.Graphics.Texture2D>(@"content/entities/rock/rock4.png", ContentManagerName))
+				{
+					registerUnload = true;
+				}
+				Rock4 = FlatRedBallServices.Load<Microsoft.Xna.Framework.Graphics.Texture2D>(@"content/entities/rock/rock4.png", ContentManagerName);
 				if (registerUnload && ContentManagerName != FlatRedBallServices.GlobalContentManager)
 				{
 					lock (mLockObject)
@@ -196,9 +266,51 @@ namespace RockBlaster.Entities
 		{
 			IsStaticContentLoaded = false;
 			mHasRegisteredUnload = false;
+			if (Rock1 != null)
+			{
+				Rock1= null;
+			}
+			if (Rock2 != null)
+			{
+				Rock2= null;
+			}
+			if (Rock3 != null)
+			{
+				Rock3= null;
+			}
+			if (Rock4 != null)
+			{
+				Rock4= null;
+			}
+		}
+		public static object GetStaticMember (string memberName)
+		{
+			switch(memberName)
+			{
+				case  "Rock1":
+					return Rock1;
+				case  "Rock2":
+					return Rock2;
+				case  "Rock3":
+					return Rock3;
+				case  "Rock4":
+					return Rock4;
+			}
+			return null;
 		}
 		object GetMember (string memberName)
 		{
+			switch(memberName)
+			{
+				case  "Rock1":
+					return Rock1;
+				case  "Rock2":
+					return Rock2;
+				case  "Rock3":
+					return Rock3;
+				case  "Rock4":
+					return Rock4;
+			}
 			return null;
 		}
 		protected bool mIsPaused;
@@ -210,6 +322,8 @@ namespace RockBlaster.Entities
 		public virtual void SetToIgnorePausing ()
 		{
 			InstructionManager.IgnorePausingFor(this);
+			InstructionManager.IgnorePausingFor(Sprite);
+			InstructionManager.IgnorePausingFor(Collision);
 		}
 
     }

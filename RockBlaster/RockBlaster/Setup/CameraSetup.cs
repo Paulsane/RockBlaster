@@ -11,7 +11,12 @@ namespace RockBlaster
 	{
 		internal static void SetupCamera(Camera cameraToSetUp, GraphicsDeviceManager graphicsDeviceManager)
 		{
-			cameraToSetUp.UsePixelCoordinates();
+			#if !WINDOWS_PHONE
+			FlatRedBallServices.GraphicsOptions.SetResolution(800, 600);
+			#else
+			graphicsDeviceManager.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
+			#endif
+			cameraToSetUp.UsePixelCoordinates(false, 800, 600);
 
 
 

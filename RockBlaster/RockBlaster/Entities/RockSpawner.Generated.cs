@@ -40,7 +40,7 @@ using Model = Microsoft.Xna.Framework.Graphics.Model;
 
 namespace RockBlaster.Entities
 {
-	public partial class Hud : PositionedObject, IDestroyable
+	public partial class RockSpawner : PositionedObject, IDestroyable
 	{
         // This is made global so that static lazy-loaded content can access it.
         public static string ContentManagerName
@@ -57,18 +57,21 @@ namespace RockBlaster.Entities
 		static bool mHasRegisteredUnload = false;
 		static bool IsStaticContentLoaded = false;
 		
-		private PositionedObjectList<HealthBar> HealthBarList;
+		public float RocksPerSecond = 0.2f;
+		public float SpawnRateIncrease = 0.015f;
+		public float MinVelocity = 50f;
+		public float MaxVelocity = 100f;
 		public int Index { get; set; }
 		public bool Used { get; set; }
 		protected Layer LayerProvidedByContainer = null;
 
-        public Hud(string contentManagerName) :
+        public RockSpawner(string contentManagerName) :
             this(contentManagerName, true)
         {
         }
 
 
-        public Hud(string contentManagerName, bool addToManagers) :
+        public RockSpawner(string contentManagerName, bool addToManagers) :
 			base()
 		{
 			// Don't delete this:
@@ -81,7 +84,6 @@ namespace RockBlaster.Entities
 		{
 			// Generated Initialize
 			LoadStaticContent(ContentManagerName);
-			HealthBarList = new PositionedObjectList<HealthBar>();
 			
 			PostInitialize();
 			if (addToManagers)
@@ -105,14 +107,6 @@ namespace RockBlaster.Entities
 		{
 			// Generated Activity
 			
-			for (int i = HealthBarList.Count - 1; i > -1; i--)
-			{
-				if (i < HealthBarList.Count)
-				{
-					// We do the extra if-check because activity could destroy any number of entities
-					HealthBarList[i].Activity();
-				}
-			}
 			CustomActivity();
 			
 			// After Custom Activity
@@ -123,10 +117,6 @@ namespace RockBlaster.Entities
 			// Generated Destroy
 			SpriteManager.RemovePositionedObject(this);
 			
-			for (int i = HealthBarList.Count - 1; i > -1; i--)
-			{
-				HealthBarList[i].Destroy();
-			}
 
 
 			CustomDestroy();
@@ -137,6 +127,10 @@ namespace RockBlaster.Entities
 		{
 			bool oldShapeManagerSuppressAdd = FlatRedBall.Math.Geometry.ShapeManager.SuppressAddingOnVisibilityTrue;
 			FlatRedBall.Math.Geometry.ShapeManager.SuppressAddingOnVisibilityTrue = true;
+			RocksPerSecond = 0.2f;
+			SpawnRateIncrease = 0.015f;
+			MinVelocity = 50f;
+			MaxVelocity = 100f;
 			FlatRedBall.Math.Geometry.ShapeManager.SuppressAddingOnVisibilityTrue = oldShapeManagerSuppressAdd;
 		}
 		public virtual void AddToManagersBottomUp (Layer layerToAddTo)
@@ -167,10 +161,6 @@ namespace RockBlaster.Entities
 		{
 			this.ForceUpdateDependenciesDeep();
 			SpriteManager.ConvertToManuallyUpdated(this);
-			for (int i = 0; i < HealthBarList.Count; i++)
-			{
-				HealthBarList[i].ConvertToManuallyUpdated();
-			}
 		}
 		public static void LoadStaticContent (string contentManagerName)
 		{
@@ -192,7 +182,7 @@ namespace RockBlaster.Entities
 				{
 					if (!mHasRegisteredUnload && ContentManagerName != FlatRedBallServices.GlobalContentManager)
 					{
-						FlatRedBallServices.GetContentManagerByName(ContentManagerName).AddUnloadMethod("HudStaticUnload", UnloadStaticContent);
+						FlatRedBallServices.GetContentManagerByName(ContentManagerName).AddUnloadMethod("RockSpawnerStaticUnload", UnloadStaticContent);
 						mHasRegisteredUnload = true;
 					}
 				}
@@ -203,7 +193,7 @@ namespace RockBlaster.Entities
 					{
 						if (!mHasRegisteredUnload && ContentManagerName != FlatRedBallServices.GlobalContentManager)
 						{
-							FlatRedBallServices.GetContentManagerByName(ContentManagerName).AddUnloadMethod("HudStaticUnload", UnloadStaticContent);
+							FlatRedBallServices.GetContentManagerByName(ContentManagerName).AddUnloadMethod("RockSpawnerStaticUnload", UnloadStaticContent);
 							mHasRegisteredUnload = true;
 						}
 					}
@@ -235,7 +225,7 @@ namespace RockBlaster.Entities
 	
 	
 	// Extra classes
-	public static class HudExtensionMethods
+	public static class RockSpawnerExtensionMethods
 	{
 	}
 	
