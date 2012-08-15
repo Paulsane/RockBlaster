@@ -57,6 +57,7 @@ namespace RockBlaster.Entities
             Vector3 velocity = GetRandomRockVelocity(position);
 
             Rock rock = RockBlaster.Factories.RockFactory.CreateNew();
+            rock.CurrentState = Rock.VariableState.Size4;
             rock.Position = position;
             rock.Velocity = velocity;
 

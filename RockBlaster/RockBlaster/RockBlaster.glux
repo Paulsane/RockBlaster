@@ -53,6 +53,10 @@
           <AddToManagers>true</AddToManagers>
         </NamedObjectSave>
         <NamedObjectSave>
+          <CustomProperty>
+            <Type>int</Type>
+            <Member>Score</Member>
+          </CustomProperty>
           <SourceType>Entity</SourceType>
           <SourceClassType>Entities\Hud</SourceClassType>
           <InstanceName>HudInstance</InstanceName>
@@ -190,6 +194,29 @@
       <Is2D>false</Is2D>
     </EntitySave>
     <EntitySave>
+      <CustomVariables>
+        <CustomVariable>
+          <Properties>
+            <PropertySave>
+              <Name>Type</Name>
+              <ValueAsString>string</ValueAsString>
+            </PropertySave>
+            <PropertySave>
+              <Name>OverridingPropertyType</Name>
+              <ValueAsString>int</ValueAsString>
+            </PropertySave>
+            <PropertySave>
+              <Name>TypeConverter</Name>
+              <ValueAsString>&lt;default&gt;</ValueAsString>
+            </PropertySave>
+          </Properties>
+          <Name>Score</Name>
+          <Type>string</Type>
+          <DefaultValue xsi:type="xsd:int">0</DefaultValue>
+          <SourceObject>TextObject</SourceObject>
+          <SourceObjectProperty>DisplayText</SourceObjectProperty>
+        </CustomVariable>
+      </CustomVariables>
       <Name>Entities\Hud</Name>
       <NamedObjects>
         <NamedObjectSave>
@@ -197,6 +224,47 @@
           <SourceClassType>PositionedObjectList&lt;T&gt;</SourceClassType>
           <SourceClassGenericType>Entities\HealthBar</SourceClassGenericType>
           <InstanceName>HealthBarList</InstanceName>
+          <AttachToContainer>true</AttachToContainer>
+          <AddToManagers>true</AddToManagers>
+        </NamedObjectSave>
+        <NamedObjectSave>
+          <CustomProperty>
+            <Type>string</Type>
+            <Member>DisplayText</Member>
+          </CustomProperty>
+          <CustomProperty>
+            <Type>float</Type>
+            <Member>X</Member>
+            <ValueAsFloat>-375</ValueAsFloat>
+          </CustomProperty>
+          <CustomProperty>
+            <Type>float</Type>
+            <Member>Y</Member>
+            <ValueAsFloat>275</ValueAsFloat>
+          </CustomProperty>
+          <CustomProperty>
+            <Type>float</Type>
+            <Member>Z</Member>
+          </CustomProperty>
+          <CustomProperty>
+            <Type>float</Type>
+            <Member>Scale</Member>
+          </CustomProperty>
+          <CustomProperty>
+            <Type>float</Type>
+            <Member>Spacing</Member>
+          </CustomProperty>
+          <CustomProperty>
+            <Type>float</Type>
+            <Member>NewLineDistance</Member>
+          </CustomProperty>
+          <CustomProperty>
+            <Type>BitmapFont</Type>
+            <Member>Font</Member>
+          </CustomProperty>
+          <SourceType>FlatRedBallType</SourceType>
+          <SourceClassType>Text</SourceClassType>
+          <InstanceName>TextObject</InstanceName>
           <AttachToContainer>true</AttachToContainer>
           <AddToManagers>true</AddToManagers>
         </NamedObjectSave>
@@ -328,6 +396,128 @@
       <Is2D>false</Is2D>
     </EntitySave>
     <EntitySave>
+      <States>
+        <StateSave>
+          <InstructionSaves>
+            <InstructionSave>
+              <Type>String</Type>
+              <Member>SpriteTexture</Member>
+              <ValueAsString>Rock1</ValueAsString>
+            </InstructionSave>
+            <InstructionSave>
+              <Type>Single</Type>
+              <Member>CollisionRadius</Member>
+              <ValueAsFloat>6</ValueAsFloat>
+            </InstructionSave>
+          </InstructionSaves>
+          <Name>Size1</Name>
+        </StateSave>
+        <StateSave>
+          <InstructionSaves>
+            <InstructionSave>
+              <Type>String</Type>
+              <Member>SpriteTexture</Member>
+              <ValueAsString>Rock2</ValueAsString>
+            </InstructionSave>
+            <InstructionSave>
+              <Type>Single</Type>
+              <Member>CollisionRadius</Member>
+              <ValueAsFloat>12</ValueAsFloat>
+            </InstructionSave>
+          </InstructionSaves>
+          <Name>Size2</Name>
+        </StateSave>
+        <StateSave>
+          <InstructionSaves>
+            <InstructionSave>
+              <Type>String</Type>
+              <Member>SpriteTexture</Member>
+              <ValueAsString>Rock3</ValueAsString>
+            </InstructionSave>
+            <InstructionSave>
+              <Type>Single</Type>
+              <Member>CollisionRadius</Member>
+              <ValueAsFloat>20</ValueAsFloat>
+            </InstructionSave>
+          </InstructionSaves>
+          <Name>Size3</Name>
+        </StateSave>
+        <StateSave>
+          <InstructionSaves>
+            <InstructionSave>
+              <Type>String</Type>
+              <Member>SpriteTexture</Member>
+              <ValueAsString>Rock4</ValueAsString>
+            </InstructionSave>
+            <InstructionSave>
+              <Type>Single</Type>
+              <Member>CollisionRadius</Member>
+              <ValueAsFloat>30</ValueAsFloat>
+            </InstructionSave>
+          </InstructionSaves>
+          <Name>Size4</Name>
+        </StateSave>
+      </States>
+      <CustomVariables>
+        <CustomVariable>
+          <Properties>
+            <PropertySave>
+              <Name>Type</Name>
+              <ValueAsString>Texture2D</ValueAsString>
+            </PropertySave>
+          </Properties>
+          <Name>SpriteTexture</Name>
+          <Type>Texture2D</Type>
+          <SourceObject>Sprite</SourceObject>
+          <SourceObjectProperty>Texture</SourceObjectProperty>
+        </CustomVariable>
+        <CustomVariable>
+          <Properties>
+            <PropertySave>
+              <Name>Type</Name>
+              <ValueAsString>float</ValueAsString>
+            </PropertySave>
+          </Properties>
+          <Name>CollisionRadius</Name>
+          <Type>float</Type>
+          <DefaultValue xsi:type="xsd:float">6</DefaultValue>
+          <SourceObject>Collision</SourceObject>
+          <SourceObjectProperty>Radius</SourceObjectProperty>
+        </CustomVariable>
+        <CustomVariable>
+          <Properties>
+            <PropertySave>
+              <Name>Type</Name>
+              <ValueAsString>int</ValueAsString>
+            </PropertySave>
+          </Properties>
+          <Name>NumberOfRocksToBreakInto</Name>
+          <Type>int</Type>
+          <DefaultValue xsi:type="xsd:int">2</DefaultValue>
+        </CustomVariable>
+        <CustomVariable>
+          <Properties>
+            <PropertySave>
+              <Name>Type</Name>
+              <ValueAsString>float</ValueAsString>
+            </PropertySave>
+          </Properties>
+          <Name>RandomSpeedOnBreak</Name>
+          <Type>float</Type>
+          <DefaultValue xsi:type="xsd:float">50</DefaultValue>
+        </CustomVariable>
+        <CustomVariable>
+          <Properties>
+            <PropertySave>
+              <Name>Type</Name>
+              <ValueAsString>int</ValueAsString>
+            </PropertySave>
+          </Properties>
+          <Name>PointsWorth</Name>
+          <Type>int</Type>
+          <DefaultValue xsi:type="xsd:int">10</DefaultValue>
+        </CustomVariable>
+      </CustomVariables>
       <Name>Entities\Rock</Name>
       <NamedObjects>
         <NamedObjectSave>

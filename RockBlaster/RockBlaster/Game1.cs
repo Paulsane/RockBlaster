@@ -13,6 +13,7 @@ using FlatRedBall.Graphics;
 using FlatRedBall.Utilities;
 
 using RockBlaster.Screens;
+using RockBlaster.Data;
 
 namespace RockBlaster
 {
@@ -47,6 +48,8 @@ namespace RockBlaster
             }
 			CameraSetup.SetupCamera(SpriteManager.Camera, graphics);
 			GlobalContent.Initialize();
+
+            GlobalData.Initialize();
 
 			Screens.ScreenManager.Start(typeof(RockBlaster.Screens.GameScreen).FullName);
 

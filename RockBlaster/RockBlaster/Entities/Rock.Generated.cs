@@ -56,6 +56,45 @@ namespace RockBlaster.Entities
 		#if DEBUG
 		static bool HasBeenLoadedWithGlobalContentManager = false;
 		#endif
+		public enum VariableState
+		{
+			Uninitialized, //This exists so that the first set call actually does something
+			Size1, 
+			Size2, 
+			Size3, 
+			Size4
+		}
+		VariableState mCurrentState = VariableState.Uninitialized;
+		public VariableState CurrentState
+		{
+			get
+			{
+				return mCurrentState;
+			}
+			set
+			{
+				mCurrentState = value;
+				switch(mCurrentState)
+				{
+					case  VariableState.Size1:
+						SpriteTexture = Rock1;
+						CollisionRadius = 6f;
+						break;
+					case  VariableState.Size2:
+						SpriteTexture = Rock2;
+						CollisionRadius = 12f;
+						break;
+					case  VariableState.Size3:
+						SpriteTexture = Rock3;
+						CollisionRadius = 20f;
+						break;
+					case  VariableState.Size4:
+						SpriteTexture = Rock4;
+						CollisionRadius = 30f;
+						break;
+				}
+			}
+		}
 		static object mLockObject = new object();
 		static bool mHasRegisteredUnload = false;
 		static bool IsStaticContentLoaded = false;
@@ -73,6 +112,31 @@ namespace RockBlaster.Entities
 				return mCollision;
 			}
 		}
+		public Microsoft.Xna.Framework.Graphics.Texture2D SpriteTexture
+		{
+			get
+			{
+				return Sprite.Texture;
+			}
+			set
+			{
+				Sprite.Texture = value;
+			}
+		}
+		public float CollisionRadius
+		{
+			get
+			{
+				return Collision.Radius;
+			}
+			set
+			{
+				Collision.Radius = value;
+			}
+		}
+		public int NumberOfRocksToBreakInto = 2;
+		public float RandomSpeedOnBreak = 50f;
+		public int PointsWorth = 10;
 		public int Index { get; set; }
 		public bool Used { get; set; }
 		protected Layer LayerProvidedByContainer = null;
@@ -166,6 +230,10 @@ namespace RockBlaster.Entities
 				mCollision.AttachTo(this, false);
 			}
 			Collision.Radius = 6f;
+			CollisionRadius = 6f;
+			NumberOfRocksToBreakInto = 2;
+			RandomSpeedOnBreak = 50f;
+			PointsWorth = 10;
 			FlatRedBall.Math.Geometry.ShapeManager.SuppressAddingOnVisibilityTrue = oldShapeManagerSuppressAdd;
 		}
 		public virtual void AddToManagersBottomUp (Layer layerToAddTo)
@@ -297,6 +365,105 @@ namespace RockBlaster.Entities
 					return Rock4;
 			}
 			return null;
+		}
+		static VariableState mLoadingState = VariableState.Uninitialized;
+		public static VariableState LoadingState
+		{
+			get
+			{
+				return mLoadingState;
+			}
+			set
+			{
+				mLoadingState = value;
+			}
+		}
+		public Instruction InterpolateToState (VariableState stateToInterpolateTo, double secondsToTake)
+		{
+			switch(stateToInterpolateTo)
+			{
+				case  VariableState.Size1:
+					Collision.RadiusVelocity = (6f - Collision.Radius) / (float)secondsToTake;
+					break;
+				case  VariableState.Size2:
+					Collision.RadiusVelocity = (12f - Collision.Radius) / (float)secondsToTake;
+					break;
+				case  VariableState.Size3:
+					Collision.RadiusVelocity = (20f - Collision.Radius) / (float)secondsToTake;
+					break;
+				case  VariableState.Size4:
+					Collision.RadiusVelocity = (30f - Collision.Radius) / (float)secondsToTake;
+					break;
+			}
+			var instruction = new DelegateInstruction<VariableState>(StopStateInterpolation, stateToInterpolateTo);
+			instruction.TimeToExecute = TimeManager.CurrentTime + secondsToTake;
+			this.Instructions.Add(instruction);
+			return instruction;
+		}
+		public void StopStateInterpolation (VariableState stateToStop)
+		{
+			switch(stateToStop)
+			{
+				case  VariableState.Size1:
+					Collision.RadiusVelocity =  0;
+					break;
+				case  VariableState.Size2:
+					Collision.RadiusVelocity =  0;
+					break;
+				case  VariableState.Size3:
+					Collision.RadiusVelocity =  0;
+					break;
+				case  VariableState.Size4:
+					Collision.RadiusVelocity =  0;
+					break;
+			}
+			CurrentState = stateToStop;
+		}
+		public void InterpolateBetween (VariableState firstState, VariableState secondState, float interpolationValue)
+		{
+			#if DEBUG
+			if (float.IsNaN(interpolationValue))
+			{
+				throw new Exception("interpolationValue cannot be NaN");
+			}
+			#endif
+			bool setCollisionRadius = true;
+			Single CollisionRadiusFirstValue = 0;
+			Single CollisionRadiusSecondValue = 0;
+			switch(firstState)
+			{
+				case  VariableState.Size1:
+					CollisionRadiusFirstValue = 6f;
+					break;
+				case  VariableState.Size2:
+					CollisionRadiusFirstValue = 12f;
+					break;
+				case  VariableState.Size3:
+					CollisionRadiusFirstValue = 20f;
+					break;
+				case  VariableState.Size4:
+					CollisionRadiusFirstValue = 30f;
+					break;
+			}
+			switch(secondState)
+			{
+				case  VariableState.Size1:
+					CollisionRadiusSecondValue = 6f;
+					break;
+				case  VariableState.Size2:
+					CollisionRadiusSecondValue = 12f;
+					break;
+				case  VariableState.Size3:
+					CollisionRadiusSecondValue = 20f;
+					break;
+				case  VariableState.Size4:
+					CollisionRadiusSecondValue = 30f;
+					break;
+			}
+			if (setCollisionRadius)
+			{
+				CollisionRadius = CollisionRadiusFirstValue * (1 - interpolationValue) + CollisionRadiusSecondValue * interpolationValue;
+			}
 		}
 		object GetMember (string memberName)
 		{

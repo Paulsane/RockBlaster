@@ -22,6 +22,7 @@ using Texture2D = Microsoft.Xna.Framework.Graphics.Texture2D;
 #endif
 
 using RockBlaster.Entities;
+using RockBlaster.Data;
 
 namespace RockBlaster.Screens
 {
@@ -47,7 +48,7 @@ namespace RockBlaster.Screens
             RockVsRockCollisionActivity();
         }
 
-        private void RockVsRockCollisionActivity()
+        private void BulletVsRockCollisionActivity()
         {
             for (int i = BulletList.Count - 1; i > -1; i--)
             {
@@ -58,7 +59,9 @@ namespace RockBlaster.Screens
 
                     if (rock.Collision.CollideAgainst(bullet.Collision))
                     {
-                        rock.Destroy();
+                        GlobalData.PlayerData.Score += rock.PointsWorth;
+                        this.HudInstance.Score = GlobalData.PlayerData.Score;
+                        rock.TakeHit();
                         bullet.Destroy();
                         break;
                     }
@@ -85,7 +88,7 @@ namespace RockBlaster.Screens
             }
         }
 
-        private void BulletVsRockCollisionActivity()
+        private void RockVsRockCollisionActivity()
         {
             for (int i = 0; i < RockList.Count; i++)
             {

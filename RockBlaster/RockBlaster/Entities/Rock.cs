@@ -48,5 +48,43 @@ namespace RockBlaster.Entities
 
 
         }
-	}
+
+        public void TakeHit()
+        {
+            switch (this.CurrentState)
+            {
+                case VariableState.Size4:
+                    BreakIntoPieces(VariableState.Size3);
+                    break;
+                case VariableState.Size3:
+                    BreakIntoPieces(VariableState.Size2);
+                    break;
+                case VariableState.Size2:
+                    BreakIntoPieces(VariableState.Size1);
+                    break;
+                case VariableState.Size1:
+                    // do nothing
+                    break;
+            }
+            this.Destroy();
+        }
+
+        private void BreakIntoPieces(VariableState newRockState)
+        {
+            for (int i = 0; i < NumberOfRocksToBreakInto; i++)
+            {
+                Rock newRock = RockBlaster.Factories.RockFactory.CreateNew();
+                newRock.Position = this.Position;
+                newRock.Position.X += -1 + 2 * (float)(FlatRedBallServices.Random.NextDouble());
+                newRock.Position.Y += -1 + 2 * (float)(FlatRedBallServices.Random.NextDouble());
+
+                float randomAngle =
+                    (float)(FlatRedBallServices.Random.NextDouble() * System.Math.PI * 2);
+
+                float speed = 0 + (float)(FlatRedBallServices.Random.NextDouble() * RandomSpeedOnBreak);
+                newRock.Velocity = FlatRedBall.Math.MathFunctions.AngleToVector(randomAngle) * speed;
+                newRock.CurrentState = newRockState;
+            }
+        }
+    }
 }

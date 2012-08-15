@@ -58,6 +58,18 @@ namespace RockBlaster.Entities
 		static bool IsStaticContentLoaded = false;
 		
 		private PositionedObjectList<HealthBar> HealthBarList;
+		private FlatRedBall.Graphics.Text TextObject;
+		public int Score
+		{
+			get
+			{
+				return int.Parse(TextObject.DisplayText);
+			}
+			set
+			{
+				TextObject.DisplayText = value.ToString();
+			}
+		}
 		public int Index { get; set; }
 		public bool Used { get; set; }
 		protected Layer LayerProvidedByContainer = null;
@@ -82,6 +94,7 @@ namespace RockBlaster.Entities
 			// Generated Initialize
 			LoadStaticContent(ContentManagerName);
 			HealthBarList = new PositionedObjectList<HealthBar>();
+			TextObject = new FlatRedBall.Graphics.Text();
 			
 			PostInitialize();
 			if (addToManagers)
@@ -127,6 +140,10 @@ namespace RockBlaster.Entities
 			{
 				HealthBarList[i].Destroy();
 			}
+			if (TextObject != null)
+			{
+				TextObject.Detach(); TextManager.RemoveText(TextObject);
+			}
 
 
 			CustomDestroy();
@@ -137,6 +154,28 @@ namespace RockBlaster.Entities
 		{
 			bool oldShapeManagerSuppressAdd = FlatRedBall.Math.Geometry.ShapeManager.SuppressAddingOnVisibilityTrue;
 			FlatRedBall.Math.Geometry.ShapeManager.SuppressAddingOnVisibilityTrue = true;
+			if (TextObject!= null && TextObject.Parent == null)
+			{
+				TextObject.CopyAbsoluteToRelative();
+				TextObject.AttachTo(this, false);
+			}
+			if (TextObject.Parent == null)
+			{
+				TextObject.X = -375f;
+			}
+			else
+			{
+				TextObject.RelativeX = -375f;
+			}
+			if (TextObject.Parent == null)
+			{
+				TextObject.Y = 275f;
+			}
+			else
+			{
+				TextObject.RelativeY = 275f;
+			}
+			Score = 0;
 			FlatRedBall.Math.Geometry.ShapeManager.SuppressAddingOnVisibilityTrue = oldShapeManagerSuppressAdd;
 		}
 		public virtual void AddToManagersBottomUp (Layer layerToAddTo)
@@ -156,6 +195,24 @@ namespace RockBlaster.Entities
 			RotationX = 0;
 			RotationY = 0;
 			RotationZ = 0;
+			TextManager.AddToLayer(TextObject, layerToAddTo);
+			TextObject.SetPixelPerfectScale(layerToAddTo);
+			if (TextObject.Parent == null)
+			{
+				TextObject.X = -375f;
+			}
+			else
+			{
+				TextObject.RelativeX = -375f;
+			}
+			if (TextObject.Parent == null)
+			{
+				TextObject.Y = 275f;
+			}
+			else
+			{
+				TextObject.RelativeY = 275f;
+			}
 			X = oldX;
 			Y = oldY;
 			Z = oldZ;
@@ -171,6 +228,7 @@ namespace RockBlaster.Entities
 			{
 				HealthBarList[i].ConvertToManuallyUpdated();
 			}
+			TextManager.ConvertToManuallyUpdated(TextObject);
 		}
 		public static void LoadStaticContent (string contentManagerName)
 		{
@@ -229,6 +287,7 @@ namespace RockBlaster.Entities
 		public virtual void SetToIgnorePausing ()
 		{
 			InstructionManager.IgnorePausingFor(this);
+			InstructionManager.IgnorePausingFor(TextObject);
 		}
 
     }
