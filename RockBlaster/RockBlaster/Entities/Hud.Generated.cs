@@ -70,6 +70,7 @@ namespace RockBlaster.Entities
 				TextObject.DisplayText = value.ToString();
 			}
 		}
+		public float HealthBarY = 250f;
 		public int Index { get; set; }
 		public bool Used { get; set; }
 		protected Layer LayerProvidedByContainer = null;
@@ -176,6 +177,7 @@ namespace RockBlaster.Entities
 				TextObject.RelativeY = 275f;
 			}
 			Score = 0;
+			HealthBarY = 250f;
 			FlatRedBall.Math.Geometry.ShapeManager.SuppressAddingOnVisibilityTrue = oldShapeManagerSuppressAdd;
 		}
 		public virtual void AddToManagersBottomUp (Layer layerToAddTo)

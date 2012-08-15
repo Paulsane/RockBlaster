@@ -37,6 +37,10 @@
                 <Type>float</Type>
                 <Member>TurningSpeed</Member>
               </CustomProperty>
+              <CustomProperty>
+                <Type>int</Type>
+                <Member>StartingHealth</Member>
+              </CustomProperty>
               <SourceType>Entity</SourceType>
               <SourceClassType>Entities\MainShip</SourceClassType>
               <InstanceName>Player1Ship</InstanceName>
@@ -56,6 +60,10 @@
           <CustomProperty>
             <Type>int</Type>
             <Member>Score</Member>
+          </CustomProperty>
+          <CustomProperty>
+            <Type>float</Type>
+            <Member>HealthBarY</Member>
           </CustomProperty>
           <SourceType>Entity</SourceType>
           <SourceClassType>Entities\Hud</SourceClassType>
@@ -190,7 +198,224 @@
       <Is2D>false</Is2D>
     </EntitySave>
     <EntitySave>
+      <States>
+        <StateSave>
+          <InstructionSaves>
+            <InstructionSave>
+              <Type>Single</Type>
+              <Member>BarSpriteScaleX</Member>
+              <ValueAsFloat>22</ValueAsFloat>
+            </InstructionSave>
+            <InstructionSave>
+              <Type>Single</Type>
+              <Member>BarSpriteX</Member>
+              <ValueAsFloat>0</ValueAsFloat>
+            </InstructionSave>
+          </InstructionSaves>
+          <Name>Full</Name>
+        </StateSave>
+        <StateSave>
+          <InstructionSaves>
+            <InstructionSave>
+              <Type>Single</Type>
+              <Member>BarSpriteScaleX</Member>
+              <ValueAsFloat>0</ValueAsFloat>
+            </InstructionSave>
+            <InstructionSave>
+              <Type>Single</Type>
+              <Member>BarSpriteX</Member>
+              <ValueAsFloat>-22</ValueAsFloat>
+            </InstructionSave>
+          </InstructionSaves>
+          <Name>Depleted</Name>
+        </StateSave>
+      </States>
+      <CustomVariables>
+        <CustomVariable>
+          <Properties>
+            <PropertySave>
+              <Name>Type</Name>
+              <ValueAsString>float</ValueAsString>
+            </PropertySave>
+          </Properties>
+          <Name>FrameSpriteRed</Name>
+          <Type>float</Type>
+          <DefaultValue xsi:type="xsd:float">1</DefaultValue>
+          <SourceObject>FrameSprite</SourceObject>
+          <SourceObjectProperty>Red</SourceObjectProperty>
+        </CustomVariable>
+        <CustomVariable>
+          <Properties>
+            <PropertySave>
+              <Name>Type</Name>
+              <ValueAsString>float</ValueAsString>
+            </PropertySave>
+          </Properties>
+          <Name>FrameSpriteGreen</Name>
+          <Type>float</Type>
+          <DefaultValue xsi:type="xsd:float">1</DefaultValue>
+          <SourceObject>FrameSprite</SourceObject>
+          <SourceObjectProperty>Green</SourceObjectProperty>
+        </CustomVariable>
+        <CustomVariable>
+          <Properties>
+            <PropertySave>
+              <Name>Type</Name>
+              <ValueAsString>float</ValueAsString>
+            </PropertySave>
+          </Properties>
+          <Name>FrameSpriteBlue</Name>
+          <Type>float</Type>
+          <DefaultValue xsi:type="xsd:float">0</DefaultValue>
+          <SourceObject>FrameSprite</SourceObject>
+          <SourceObjectProperty>Blue</SourceObjectProperty>
+        </CustomVariable>
+        <CustomVariable>
+          <Properties>
+            <PropertySave>
+              <Name>Type</Name>
+              <ValueAsString>float</ValueAsString>
+            </PropertySave>
+          </Properties>
+          <Name>BarSpriteRed</Name>
+          <Type>float</Type>
+          <DefaultValue xsi:type="xsd:float">0</DefaultValue>
+          <SourceObject>BarSprite</SourceObject>
+          <SourceObjectProperty>Red</SourceObjectProperty>
+        </CustomVariable>
+        <CustomVariable>
+          <Properties>
+            <PropertySave>
+              <Name>Type</Name>
+              <ValueAsString>float</ValueAsString>
+            </PropertySave>
+          </Properties>
+          <Name>BarSpriteGreen</Name>
+          <Type>float</Type>
+          <DefaultValue xsi:type="xsd:float">1</DefaultValue>
+          <SourceObject>BarSprite</SourceObject>
+          <SourceObjectProperty>Green</SourceObjectProperty>
+        </CustomVariable>
+        <CustomVariable>
+          <Properties>
+            <PropertySave>
+              <Name>Type</Name>
+              <ValueAsString>float</ValueAsString>
+            </PropertySave>
+          </Properties>
+          <Name>BarSpriteBlue</Name>
+          <Type>float</Type>
+          <DefaultValue xsi:type="xsd:float">0</DefaultValue>
+          <SourceObject>BarSprite</SourceObject>
+          <SourceObjectProperty>Blue</SourceObjectProperty>
+        </CustomVariable>
+        <CustomVariable>
+          <Properties>
+            <PropertySave>
+              <Name>Type</Name>
+              <ValueAsString>float</ValueAsString>
+            </PropertySave>
+          </Properties>
+          <Name>BarSpriteScaleX</Name>
+          <Type>float</Type>
+          <DefaultValue xsi:type="xsd:float">22</DefaultValue>
+          <SourceObject>BarSprite</SourceObject>
+          <SourceObjectProperty>ScaleX</SourceObjectProperty>
+        </CustomVariable>
+        <CustomVariable>
+          <Properties>
+            <PropertySave>
+              <Name>Type</Name>
+              <ValueAsString>float</ValueAsString>
+            </PropertySave>
+          </Properties>
+          <Name>BarSpriteX</Name>
+          <Type>float</Type>
+          <DefaultValue xsi:type="xsd:float">0</DefaultValue>
+          <SourceObject>BarSprite</SourceObject>
+          <SourceObjectProperty>X</SourceObjectProperty>
+        </CustomVariable>
+      </CustomVariables>
       <Name>Entities\HealthBar</Name>
+      <NamedObjects>
+        <NamedObjectSave>
+          <CustomProperty>
+            <Type>float</Type>
+            <Member>X</Member>
+          </CustomProperty>
+          <CustomProperty>
+            <Type>float</Type>
+            <Member>Y</Member>
+          </CustomProperty>
+          <CustomProperty>
+            <Type>float</Type>
+            <Member>Z</Member>
+          </CustomProperty>
+          <CustomProperty>
+            <Type>float</Type>
+            <Member>ScaleX</Member>
+            <ValueAsFloat>24</ValueAsFloat>
+          </CustomProperty>
+          <CustomProperty>
+            <Type>float</Type>
+            <Member>ScaleY</Member>
+            <ValueAsFloat>6</ValueAsFloat>
+          </CustomProperty>
+          <CustomProperty>
+            <Type>float</Type>
+            <Member>PixelSize</Member>
+          </CustomProperty>
+          <CustomProperty>
+            <Type>Texture2D</Type>
+            <Member>Texture</Member>
+          </CustomProperty>
+          <SourceType>FlatRedBallType</SourceType>
+          <SourceClassType>Sprite</SourceClassType>
+          <InstanceName>FrameSprite</InstanceName>
+          <AttachToContainer>true</AttachToContainer>
+          <AddToManagers>true</AddToManagers>
+        </NamedObjectSave>
+        <NamedObjectSave>
+          <CustomProperty>
+            <Type>float</Type>
+            <Member>X</Member>
+            <ValueAsFloat>0</ValueAsFloat>
+          </CustomProperty>
+          <CustomProperty>
+            <Type>float</Type>
+            <Member>Y</Member>
+            <ValueAsFloat>0</ValueAsFloat>
+          </CustomProperty>
+          <CustomProperty>
+            <Type>float</Type>
+            <Member>Z</Member>
+            <ValueAsFloat>1</ValueAsFloat>
+          </CustomProperty>
+          <CustomProperty>
+            <Type>float</Type>
+            <Member>ScaleX</Member>
+            <ValueAsFloat>22</ValueAsFloat>
+          </CustomProperty>
+          <CustomProperty>
+            <Type>float</Type>
+            <Member>ScaleY</Member>
+            <ValueAsFloat>4</ValueAsFloat>
+          </CustomProperty>
+          <CustomProperty>
+            <Type>float</Type>
+            <Member>PixelSize</Member>
+          </CustomProperty>
+          <CustomProperty>
+            <Type>Texture2D</Type>
+            <Member>Texture</Member>
+          </CustomProperty>
+          <SourceType>FlatRedBallType</SourceType>
+          <SourceClassType>Sprite</SourceClassType>
+          <InstanceName>BarSprite</InstanceName>
+          <AttachToContainer>true</AttachToContainer>
+          <AddToManagers>true</AddToManagers>
+        </NamedObjectSave>
+      </NamedObjects>
       <Is2D>false</Is2D>
     </EntitySave>
     <EntitySave>
@@ -215,6 +440,17 @@
           <DefaultValue xsi:type="xsd:int">0</DefaultValue>
           <SourceObject>TextObject</SourceObject>
           <SourceObjectProperty>DisplayText</SourceObjectProperty>
+        </CustomVariable>
+        <CustomVariable>
+          <Properties>
+            <PropertySave>
+              <Name>Type</Name>
+              <ValueAsString>float</ValueAsString>
+            </PropertySave>
+          </Properties>
+          <Name>HealthBarY</Name>
+          <Type>float</Type>
+          <DefaultValue xsi:type="xsd:float">250</DefaultValue>
         </CustomVariable>
       </CustomVariables>
       <Name>Entities\Hud</Name>
@@ -294,6 +530,17 @@
           <Name>TurningSpeed</Name>
           <Type>float</Type>
           <DefaultValue xsi:type="xsd:float">3.14</DefaultValue>
+        </CustomVariable>
+        <CustomVariable>
+          <Properties>
+            <PropertySave>
+              <Name>Type</Name>
+              <ValueAsString>int</ValueAsString>
+            </PropertySave>
+          </Properties>
+          <Name>StartingHealth</Name>
+          <Type>int</Type>
+          <DefaultValue xsi:type="xsd:int">6</DefaultValue>
         </CustomVariable>
       </CustomVariables>
       <Name>Entities\MainShip</Name>

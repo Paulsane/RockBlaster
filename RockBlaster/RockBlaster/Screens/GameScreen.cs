@@ -31,9 +31,30 @@ namespace RockBlaster.Screens
 
 		void CustomInitialize()
 		{
-
-
+            AddAdditionalShips();
+            this.HudInstance.MainShipList = MainShipList;
 		}
+
+        private void AddAdditionalShips()
+        {
+            for (int i = 1; i < InputManager.Xbox360GamePads.Length; i++)
+            {
+                if (InputManager.Xbox360GamePads[i].IsConnected)
+                {
+                    MainShip mainShip = new MainShip(ContentManagerName);
+                    mainShip.PlayerIndex = i;
+                    MainShipList.Add(mainShip);
+                }
+            }
+
+            const float spacingBetweenPlayers = 60;
+            const float startingX = -90;
+            // Reposition all players
+            for (int i = 0; i < MainShipList.Count; i++)
+            {
+                MainShipList[i].X = -startingX + i * spacingBetweenPlayers;
+            }
+        }
 
 		void CustomActivity(bool firstTimeCalled)
 		{
@@ -80,8 +101,8 @@ namespace RockBlaster.Screens
 
                     if (mainShip.Collision.CollideAgainst(rock.Collision))
                     {
-                        mainShip.Destroy();
-                        rock.Destroy();
+                        mainShip.Health--;
+                        rock.TakeHit();
                         break;
                     }
                 }

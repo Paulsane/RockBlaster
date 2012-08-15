@@ -25,12 +25,56 @@ namespace RockBlaster.Entities
 {
 	public partial class MainShip
 	{
+        int mHealth;
+        public int Health
+        {
+            get
+            {
+                return mHealth;
+            }
+            set
+            {
+                mHealth = value;
+                if (mHealth <= 0)
+                {
+                    Destroy();
+                }
+            }
+        }
+
+        int mPlayerIndex = 0;
+        public int PlayerIndex
+        {
+            get { return mPlayerIndex; }
+            set
+            {
+                mPlayerIndex = value;
+                mGamePad = InputManager.Xbox360GamePads[mPlayerIndex];
+
+                switch (mPlayerIndex)
+                {
+                    case 0:
+                        this.Sprite.Texture = MainShip1;
+                        break;
+                    case 1:
+                        this.Sprite.Texture = MainShip2;
+                        break;
+                    case 2:
+                        this.Sprite.Texture = MainShip3;
+                        break;
+                    case 3:
+                        this.Sprite.Texture = MainShip4;
+                        break;
+                }
+            }
+        }
+
         Xbox360GamePad mGamePad;
 
 		private void CustomInitialize()
 		{
             mGamePad = InputManager.Xbox360GamePads[0];
-            
+            Health = StartingHealth;
 		}
 
 		private void CustomActivity()

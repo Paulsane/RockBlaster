@@ -74,6 +74,7 @@ namespace RockBlaster.Entities
 		}
 		public float MovementSpeed = 100f;
 		public float TurningSpeed = 3.14f;
+		public int StartingHealth = 6;
 		public int Index { get; set; }
 		public bool Used { get; set; }
 		protected Layer LayerProvidedByContainer = null;
@@ -199,6 +200,7 @@ namespace RockBlaster.Entities
 			Collision.Radius = 10f;
 			MovementSpeed = 100f;
 			TurningSpeed = 3.14f;
+			StartingHealth = 6;
 			FlatRedBall.Math.Geometry.ShapeManager.SuppressAddingOnVisibilityTrue = oldShapeManagerSuppressAdd;
 		}
 		public virtual void AddToManagersBottomUp (Layer layerToAddTo)

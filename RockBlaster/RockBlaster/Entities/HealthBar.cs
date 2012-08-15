@@ -25,6 +25,23 @@ namespace RockBlaster.Entities
 {
 	public partial class HealthBar
 	{
+        public MainShip MainShip
+        {
+            get;
+            set;
+        }
+
+        float mRatioFull;
+        public float RatioFull
+        {
+            get { return mRatioFull; }
+            set
+            {
+                mRatioFull = value;
+                InterpolateBetween(VariableState.Depleted, VariableState.Full, mRatioFull);
+            }
+        }
+
 		private void CustomInitialize()
 		{
 
@@ -33,7 +50,7 @@ namespace RockBlaster.Entities
 
 		private void CustomActivity()
 		{
-
+            RatioFull = MainShip.Health / (float)MainShip.StartingHealth;
 
 		}
 
